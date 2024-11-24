@@ -3,8 +3,10 @@
 #define FORMWINDOW_H
 
 #include <string>
-
+#include <vector>
 // Function to open a modal form window
-bool openFormWindow(std::string& name, std::string& description, int& price, std::string& imagePath);
+;
+bool openFormWindow(std::string& name, std::string& description, int& price, std::vector<std::string>& imagePaths);
+
 
 #endif // FORMWINDOW_H

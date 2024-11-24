@@ -1,4 +1,3 @@
-// Layout.cpp
 #include "Layout.h"
 #include <algorithm>
 
@@ -19,16 +18,16 @@ void updateLayout(sf::RenderWindow& window, std::vector<Item>& items, int& boxWi
                   const int PADDING, sf::RectangleShape& uploadButton, sf::Text& uploadText) {
     int maxRowWidth = window.getSize().x;
 
-    // Determine the number of items per row based on the window width
-    int numItemsPerRow = std::max(1, maxRowWidth / (Item::BOX_WIDTH + PADDING));
+    // Determine the number of items per row
+    int numItemsPerRow = std::max(1, (maxRowWidth - PADDING) / (Item::BOX_WIDTH + PADDING));
 
     // Recalculate boxWidth and boxHeight
-    boxWidth = (maxRowWidth - (numItemsPerRow + 1) * PADDING) / numItemsPerRow;
-    boxHeight = boxWidth; // Keep the boxes square, or adjust as needed
+    boxWidth = std::max(100, (maxRowWidth - (numItemsPerRow + 1) * PADDING) / numItemsPerRow);
+    boxHeight = boxWidth; // Keep the boxes square or adjust as needed
 
-    // Calculate left margin to center the items
+    // Calculate left margin for centering
     float totalContentWidth = numItemsPerRow * boxWidth + (numItemsPerRow + 1) * PADDING;
-    float leftMargin = (maxRowWidth - totalContentWidth) / 2;
+    float leftMargin = std::max((maxRowWidth - totalContentWidth) / 2, 0.0f);
 
     // Reset positions
     nextX = leftMargin + PADDING;
@@ -39,11 +38,9 @@ void updateLayout(sf::RenderWindow& window, std::vector<Item>& items, int& boxWi
         items[i].box.setSize(sf::Vector2f(boxWidth, boxHeight));
         items[i].box.setPosition(nextX, nextY);
 
-        // Adjust the sprite size and position
+        // Adjust sprite size and position
         sf::FloatRect spriteBounds = items[i].sprite.getLocalBounds();
-        float spriteScaleX = (boxWidth - 20) / spriteBounds.width;
-        float spriteScaleY = (boxHeight - 80) / spriteBounds.height;
-        float spriteScale = std::min(spriteScaleX, spriteScaleY);
+        float spriteScale = std::min((boxWidth - 20) / spriteBounds.width, (boxHeight - 80) / spriteBounds.height);
         items[i].sprite.setScale(spriteScale, spriteScale);
         items[i].sprite.setPosition(nextX + 10, nextY + 10);
 
@@ -55,6 +52,13 @@ void updateLayout(sf::RenderWindow& window, std::vector<Item>& items, int& boxWi
         }
     }
 
-    // Adjust the Add Item button position
+    // Adjust the "Add Item" button position
     adjustAddItemButton(window, uploadButton, uploadText, nextY, boxHeight, PADDING);
+}
+
+void recalculateLayoutAfterDeletion(sf::RenderWindow& window, std::vector<Item>& items, int& boxWidth, int& boxHeight,
+                                     int& nextX, int& nextY, const int PADDING, sf::RectangleShape& uploadButton,
+                                     sf::Text& uploadText) {
+    // Simply call updateLayout to recalculate the entire layout
+    updateLayout(window, items, boxWidth, boxHeight, nextX, nextY, PADDING, uploadButton, uploadText);
 }

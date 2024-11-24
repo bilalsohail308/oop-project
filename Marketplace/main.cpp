@@ -1,135 +1,107 @@
-// main.cpp
 #include <SFML/Graphics.hpp>
-#include <vector>
-#include <string>
+#include "MarketplaceScreen.h"
+#include "NavBar.h"
+#include "AuthScreen.h"
+#include "Screen.h"
 #include <iostream>
-#include <algorithm>
-#include "Item.h"
-#include "FormWindow.h"
-#include "Layout.h"
+#include <memory>
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Marketplace", sf::Style::Default);
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Marketplace App");
     sf::Font font;
 
-    // Load the font
-    if (!font.loadFromFile("C:/Users/LENOVO/OneDrive/Desktop/Cpp/project.cpp/Arial.ttf")) {
+    if (!font.loadFromFile("C:/Users/LENOVO/OneDrive/Desktop/Cpp/project.cpp/Marketplace/Arial.ttf")) {
         std::cerr << "Error: Could not load font!" << std::endl;
         return -1;
     }
 
-    sf::Text title("Bazaar", font, 30);
-    title.setPosition(300, 10);
+    // Initialize user-related variables
+    std::string username, batch, major;
+    const std::string userFilePath = "C:/Users/LENOVO/OneDrive/Desktop/Cpp/project.cpp/Marketplace/users.txt"; // File to store user data
 
-    sf::RectangleShape uploadButton(sf::Vector2f(150, 40));
-    uploadButton.setFillColor(sf::Color::Blue);
+    // Show authentication screen
+    if (!AuthScreen::loginScreen(window, userFilePath, username, batch, major)) {
+        return 0; // Exit if the user closes the login screen
+    }
 
-    sf::Text uploadText("Add Item", font, 20);
-    uploadText.setFillColor(sf::Color::White);
+    // Dynamically manage the marketplace screen
+    std::unique_ptr<MarketplaceScreen> marketplaceScreen = std::make_unique<MarketplaceScreen>(username);
 
-    std::vector<Item> items;
+    NavBar navBar(font);
+    Screen currentScreen = MARKETPLACE; // Default to Marketplace screen
+    bool isLoggedOut = false;
 
-    // Layout variables
-    const int PADDING = 20;
-    int boxWidth = Item::BOX_WIDTH;
-    int boxHeight = Item::BOX_HEIGHT;
-    int nextX = 0, nextY = 100;
-
-    // Scroll variables
-    float scrollOffset = 0;
-    const float SCROLL_SPEED = 20.0f;
-
-    // Adjust the layout initially
-    updateLayout(window, items, boxWidth, boxHeight, nextX, nextY, PADDING, uploadButton, uploadText);
-
-    // Main Loop
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
 
-            // Handle window resize
-            if (event.type == sf::Event::Resized) {
-                window.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
-                updateLayout(window, items, boxWidth, boxHeight, nextX, nextY, PADDING, uploadButton, uploadText);
-            }
+            // Pass events to NavBar for navigation
+            navBar.handleEvents(window, event, currentScreen, isLoggedOut);
 
-            // Handle mouse wheel scrolling
-            if (event.type == sf::Event::MouseWheelScrolled) {
-                scrollOffset -= event.mouseWheelScroll.delta * SCROLL_SPEED;
+            // Handle logout functionality
+            if (isLoggedOut) {
+                // Clear previous session
+                username.clear();
+                batch.clear();
+                major.clear();
 
-                // Constrain the scroll offset
-                float contentHeight = nextY + boxHeight + PADDING + 40; // Include the space for the button
-                float maxOffset = std::max(0.0f, contentHeight - static_cast<float>(window.getSize().y));
-                scrollOffset = std::clamp(scrollOffset, -maxOffset, 0.0f);
-            }
-
-            // Handle mouse click for "Add Item" button
-            if (event.type == sf::Event::MouseButtonPressed) {
-                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-                // Adjust mouse position for scrollOffset
-                sf::Vector2f worldPos(mousePos.x, mousePos.y - scrollOffset);
-                if (uploadButton.getGlobalBounds().contains(worldPos)) {
-                    std::string name, description, imagePath;
-                    int price;
-
-                    // Open the form to add a new item
-                    if (openFormWindow(name, description, price, imagePath)) {
-                        items.emplace_back(name, description, price, imagePath);
-                        updateLayout(window, items, boxWidth, boxHeight, nextX, nextY, PADDING, uploadButton, uploadText);
-                    }
+                // Show authentication screen again
+                if (!AuthScreen::loginScreen(window, userFilePath, username, batch, major)) {
+                    return 0; // Exit if user closes login screen
                 }
+
+                // Reinitialize the marketplace screen for the new user
+                marketplaceScreen = std::make_unique<MarketplaceScreen>(username);
+                navBar = NavBar(font); // Reinitialize NavBar to avoid stale state
+                currentScreen = MARKETPLACE; // Reset to default screen
+                isLoggedOut = false; // Reset logout flag
+            }
+
+            // Handle events for the current screen
+            switch (currentScreen) {
+                case MARKETPLACE:
+                    marketplaceScreen->handleEvents(window, event);
+                    break;
+                case GOSSIP:
+                    // Handle Gossip screen events
+                    break;
+                case EVENTS:
+                    // Handle Events screen events
+                    break;
+                case TICKETING:
+                    // Handle Ticketing screen events
+                    break;
+                case PROFILE:
+                    AuthScreen::showProfileScreen(window, username, batch, major);
+                    break;
             }
         }
 
+        // Render the current screen
         window.clear(sf::Color::White);
-
-        // Draw static UI elements (title)
-        window.draw(title);
-
-        // Adjust and draw the upload button and text
-        sf::RectangleShape adjustedUploadButton = uploadButton;
-        sf::Text adjustedUploadText = uploadText;
-        adjustedUploadButton.move(0, scrollOffset);
-        adjustedUploadText.move(0, scrollOffset);
-        window.draw(adjustedUploadButton);
-        window.draw(adjustedUploadText);
-
-        // Render all items with scrollOffset applied
-        for (const auto& item : items) {
-            sf::RectangleShape adjustedBox = item.box;
-            sf::Sprite adjustedSprite = item.sprite;
-
-            adjustedBox.move(0, scrollOffset);
-            adjustedSprite.move(0, scrollOffset);
-
-            // Draw item box and image
-            window.draw(adjustedBox);
-            window.draw(adjustedSprite);
-
-            // Render item details (name, description, price)
-            sf::Text itemName(item.name, font, 15);
-            itemName.setPosition(adjustedBox.getPosition().x + 10, adjustedBox.getPosition().y + boxHeight - 70);
-            itemName.setFillColor(sf::Color::Black);
-
-            sf::Text itemDescription(item.description, font, 12);
-            itemDescription.setPosition(adjustedBox.getPosition().x + 10, adjustedBox.getPosition().y + boxHeight - 50);
-            itemDescription.setFillColor(sf::Color::Black);
-
-            sf::Text itemPrice("Price: " + std::to_string(item.price), font, 15);
-            itemPrice.setPosition(adjustedBox.getPosition().x + 10, adjustedBox.getPosition().y + boxHeight - 30);
-            itemPrice.setFillColor(sf::Color::Black);
-
-            itemName.move(0, scrollOffset);
-            itemDescription.move(0, scrollOffset);
-            itemPrice.move(0, scrollOffset);
-
-            window.draw(itemName);
-            window.draw(itemDescription);
-            window.draw(itemPrice);
+        switch (currentScreen) {
+            case MARKETPLACE:
+                marketplaceScreen->render(window);
+                break;
+            case GOSSIP:
+                // Render Gossip screen
+                break;
+            case EVENTS:
+                // Render Events screen
+                break;
+            case TICKETING:
+                // Render Ticketing screen
+                break;
+            case PROFILE:
+                AuthScreen::showProfileScreen(window, username, batch, major);
+                currentScreen = MARKETPLACE; // Return to Marketplace after viewing the profile
+                break;
         }
 
+        // Render navigation bar on top
+        navBar.render(window);
         window.display();
     }
 
