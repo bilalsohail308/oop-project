@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+
 #include "tinyfiledialog.cpp"
 using namespace std;
 
@@ -194,6 +195,7 @@ public:
 
 private:
     sf::RenderWindow* window;
+    std::string filePath = "posts.txt";
     sf::View feedView;
     sf::Font font;
     int noofposts{0};
@@ -202,8 +204,8 @@ private:
     sf::RectangleShape inputBox, background;
     sf::Text inputText;
     sf::RectangleShape postButton;
-    sf::RectangleShape navigationBar;
-    sf::Text navProfile, navFeed, navWatch,postButtontext;
+    
+    sf::Text postButtontext;
 
    
     std::vector<Post> posts;
@@ -220,6 +222,7 @@ PostFeed::PostFeed(sf::RenderWindow* win)
     : window(win), scrollOffset(0), imageLoaded(false), lastWindowSize(win->getSize()) {
     font.loadFromFile("F:\\sem3\\OOP\\oop-project\\Gossip\\arial.ttf");
     initializeUI();
+    loadItemsFromFile();
 }
 
 void PostFeed::initializeUI() {
@@ -253,24 +256,52 @@ void PostFeed::initializeUI() {
     postButtontext.setCharacterSize(17);
     postButtontext.setFillColor(sf::Color::White);
     postButtontext.setPosition(postButton.getPosition().x + 20, postButton.getPosition().y + 5);    
-    navigationBar.setSize({winWidth, winHeight * 0.08f});
-    navigationBar.setFillColor(sf::Color(128, 0, 128));
-    navigationBar.setPosition(0, winHeight - winHeight * 0.08f);
-    navProfile.setFont(font);
-    navProfile.setString("MARKETPLACE");
-    navProfile.setCharacterSize(18);
-    navProfile.setFillColor(sf::Color::White);
-    navProfile.setPosition(winWidth * 0.02f, winHeight - winHeight * 0.06f);
-    navFeed.setFont(font);
-    navFeed.setString("Upcoming EVENTS");
-    navFeed.setCharacterSize(18);
-    navFeed.setFillColor(sf::Color::White);
-    navFeed.setPosition(winWidth * 0.20f, winHeight - winHeight * 0.06f);
-    navWatch.setFont(font);
-    navWatch.setString("Leaderboard");
-    navWatch.setCharacterSize(18);
-    navWatch.setFillColor(sf::Color::White);
-    navWatch.setPosition(winWidth * 0.44f, winHeight - winHeight * 0.06f);
+    
+}
+void PostFeed::saveItemToFile(const std::string& content, const std::string& filepath, double yPosition, const std::string& username) {
+    std::ofstream outFile(filePath, std::ios::app); // Open in append mode
+    if (!outFile.is_open()) {
+        std::cerr << "Error: Could not open file for writing." << std::endl;
+        return;
+    }
+
+    // Write data in CSV format: username, content, yPosition, filepath
+    outFile << username << "," << content << "," << yPosition << "," << filepath << "\n";
+
+    outFile.close();
+}
+
+
+
+void PostFeed::loadItemsFromFile() {
+    std::ifstream inFile(filePath);
+    if (!inFile.is_open()) {
+        std::cerr << "Error: Could not open file for reading.\n";
+        return;
+    }
+
+    std::string line;
+    while (std::getline(inFile, line)) {
+        std::stringstream ss(line);
+        std::string username, content, filepath;
+        double yPosition;
+
+        // Parse the CSV line
+        if (std::getline(ss, username, ',') &&
+            std::getline(ss, content, ',') &&
+            ss >> yPosition && ss.ignore() &&
+            std::getline(ss, filepath)) {
+            
+            // Load the image texture
+            sf::Texture newTexture;
+            if (newTexture.loadFromFile(filepath)) {
+                textures.push_back(std::move(newTexture));
+                posts.emplace_back(content, textures.back(), yPosition, username);
+            }
+        }
+    }
+
+    inFile.close();
 }
 
 void PostFeed::draw() {
@@ -293,10 +324,7 @@ void PostFeed::draw() {
         window->draw(post.cmnttxt);
     }
 
-    window->draw(navigationBar);
-    window->draw(navProfile);
-    window->draw(navFeed);
-    window->draw(navWatch);
+    
 }
 
 void PostFeed::scroll(float offset) {
@@ -338,6 +366,7 @@ void PostFeed::handleEvent(const sf::Event& event,string us) {
         textures.push_back(std::move(newTexture));
         double yPosition = posts.empty() ? 25 : posts.back().postBox.getPosition().y + posts.back().postBox.getSize().y + 10;
         posts.emplace_back(content, textures.back(), yPosition,us);
+        saveItemToFile(content, filePath, yPosition, us);
         inputText.setString("Write something here...");
         inputText.setFillColor(sf::Color(128, 128, 128));
     } else {
@@ -397,7 +426,7 @@ int main() {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
-            feed.handleEvent(event,"awais");
+            feed.handleEvent(event,"Awais");
         }
 
         window.clear(sf::Color::White);
