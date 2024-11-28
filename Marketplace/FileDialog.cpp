@@ -1,7 +1,7 @@
 #include "FileDialog.h"
 #include <windows.h>
 #include <commdlg.h>
-
+#include <iostream>
 // Utility function: Convert wide string to narrow string
 std::string wideToNarrow(const std::wstring& wideString) {
     return std::string(wideString.begin(), wideString.end());
@@ -23,7 +23,7 @@ std::string openFileDialog() {
     // Open the file dialog
     if (GetOpenFileNameW(&ofn)) { // Use wide version of GetOpenFileName
         return wideToNarrow(std::wstring(fileName)); // Convert wide string to narrow and return it
-    }
+    } // Debug log
 
     return ""; // Return an empty string if the user cancels
 }

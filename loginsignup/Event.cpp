@@ -1,23 +1,16 @@
-#include "Item.h"
+#include "Event.h"
 #include <algorithm>
-#include "Utils.h"
 
-
-Item::Item(const std::string& uniqueId,
-           const std::string& name,
-           const std::string& description,
-           int price,
-           const std::vector<std::string>& imagePaths,
-           const std::string& owner)
-    : uniqueId(uniqueId), name(name), description(description), price(price), imagePaths(imagePaths), owner(owner)  { // Initialize image paths
+Event::Event(const std::string& name, const std::string& description, const std::string& date, const std::string& venue, const std::string& imagePath)
+    : name(name), description(description), date(date), venue(venue) {
     box.setSize(sf::Vector2f(BOX_WIDTH, BOX_HEIGHT));
     box.setFillColor(sf::Color(200, 200, 200));
 
     texture = std::make_shared<sf::Texture>();
-    if (!imagePaths.empty() && texture->loadFromFile(imagePaths[0])) { // Load the first image
+    if (texture->loadFromFile(imagePath)) {
         sprite.setTexture(*texture);
 
-        float scaleX = (BOX_WIDTH - 20) / static_cast<float>(texture->getSize().x);
+        float scaleX = (BOX_WIDTH - 20) / static_cast<float>(texture->getSize().x);  //resizing the image by scacel factors to adjust in the box
         float scaleY = (BOX_HEIGHT - 60) / static_cast<float>(texture->getSize().y);
         float scale = std::min(scaleX, scaleY);
         sprite.setScale(scale, scale);
