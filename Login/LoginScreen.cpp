@@ -4,6 +4,7 @@
 #include "FileHandler.hpp"
 #include "HomeScreen.hpp"
 #include <iostream>
+#include "Gossip/gossip.cpp"
 
 bool LoginScreen::show(sf::RenderWindow& window, std::string& loggedInUser) {
     sf::Font font;
@@ -58,8 +59,22 @@ bool LoginScreen::show(sf::RenderWindow& window, std::string& loggedInUser) {
                         }
 
                         if (validUser) {
-                            HomeScreen::show(window);
-                            return true;
+                            sf::RenderWindow window(sf::VideoMode(800, 600), "Post Feed");
+    PostFeed feed(&window);
+
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+            }
+            feed.handleEvent(event);
+        }
+
+        window.clear(sf::Color::White);
+        feed.draw();
+        window.display();
+    }
                         } else {
                             errorText.setString("Invalid username or password.");
                         }

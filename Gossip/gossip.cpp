@@ -4,6 +4,8 @@
 #include <string>
 #include <iostream>
 #include "tinyfiledialog.cpp"
+using namespace std;
+
 class Comment {
 public:
     sf::RectangleShape rect;
@@ -11,7 +13,7 @@ public:
     sf::Font font;
 
     Comment(const std::string& text, float yPosition) {
-        font.loadFromFile("C:\\Users\\AWAIS GILL\\Downloads\\mingw_dev_lib\\mingw_dev_lib\\SFML-Progs\\fonts\\arial.ttf");
+        font.loadFromFile("arial.ttf");
 
         content.setFont(font);
         content.setString(text);
@@ -38,7 +40,7 @@ public:
     std::vector<Comment> comments;
 
     CommentBox() {
-        font.loadFromFile("C:\\Users\\AWAIS GILL\\Downloads\\mingw_dev_lib\\mingw_dev_lib\\SFML-Progs\\fonts\\arial.ttf");
+        font.loadFromFile("F:\\sem3\\OOP\\oop-project\\Gossip\\arial.ttf");
 
         
         background.setSize({400, 600});
@@ -116,11 +118,11 @@ public:
 
 class Post {
 public:
-    Post(const std::string& content, const sf::Texture& texture, double y);
+    Post(const std::string& content, const sf::Texture& texture, double y,string a );
 
     sf::RectangleShape postBox;
     sf::Text text;
-    sf::Font font;
+    sf::Font fonta;
     sf::Sprite image;
     sf::RectangleShape likeButton ,cmntbut;
     sf::Text likeText,cmnttxt;
@@ -128,7 +130,7 @@ public:
     int likes;
 };
 
-Post::Post(const std::string& content, const sf::Texture& texture, double yPosition)
+Post::Post(const std::string& content, const sf::Texture& texture, double yPosition,string a)
     : likes(0) {
     
 ;
@@ -141,9 +143,9 @@ Post::Post(const std::string& content, const sf::Texture& texture, double yPosit
     postBox.setPosition(25, yPosition);
 
     
-    font.loadFromFile("C:\\Users\\AWAIS GILL\\Downloads\\mingw_dev_lib\\mingw_dev_lib\\SFML-Progs\\fonts\\arial.ttf");
-    text.setFont(font);
-    text.setString(content);
+    fonta.loadFromFile("F:\\sem3\\OOP\\oop-project\\Gossip\\arial.ttf");
+    text.setFont(fonta);
+    text.setString(a+" : "+content);
     text.setCharacterSize(18);
     text.setFillColor(sf::Color::Black);
     text.setPosition(postBox.getPosition().x + 10, postBox.getPosition().y + 10);
@@ -160,7 +162,7 @@ Post::Post(const std::string& content, const sf::Texture& texture, double yPosit
     likeButton.setPosition(postBox.getPosition().x + postBox.getSize().x - 90, postBox.getPosition().y + 110);
 
     
-    likeText.setFont(font);
+    likeText.setFont(fonta);
     likeText.setString("Like");
     likeText.setCharacterSize(14);
     likeText.setFillColor(sf::Color::White);
@@ -171,7 +173,7 @@ Post::Post(const std::string& content, const sf::Texture& texture, double yPosit
     cmntbut.setPosition(postBox.getPosition().x + postBox.getSize().x - 90, postBox.getPosition().y + 70);
 
     
-    cmnttxt.setFont(font);
+    cmnttxt.setFont(fonta);
     cmnttxt.setString("Comments");
     cmnttxt.setCharacterSize(14);
     cmnttxt.setFillColor(sf::Color::White);
@@ -184,10 +186,10 @@ public:
     
 
     void draw();
-    void handleEvent(const sf::Event& event);
+    void handleEvent(const sf::Event& event,string a);
     
     void scroll(float offset);
-    void createPost(const std::string& content, const sf::Texture& texture,int ne);
+    void createPost(const std::string& content, const sf::Texture& texture,int ne,string a);
     
 
 private:
@@ -216,7 +218,7 @@ private:
 
 PostFeed::PostFeed(sf::RenderWindow* win)
     : window(win), scrollOffset(0), imageLoaded(false), lastWindowSize(win->getSize()) {
-    font.loadFromFile("assets/arial.ttf");
+    font.loadFromFile("F:\\sem3\\OOP\\oop-project\\Gossip\\arial.ttf");
     initializeUI();
 }
 
@@ -311,7 +313,7 @@ void PostFeed::scroll(float offset) {
     }
 }
 
-void PostFeed::handleEvent(const sf::Event& event) {
+void PostFeed::handleEvent(const sf::Event& event,string us) {
     
     if (event.type == sf::Event::Resized) {
         window->setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
@@ -335,7 +337,7 @@ void PostFeed::handleEvent(const sf::Event& event) {
         noofposts++;
         textures.push_back(std::move(newTexture));
         double yPosition = posts.empty() ? 25 : posts.back().postBox.getPosition().y + posts.back().postBox.getSize().y + 10;
-        posts.emplace_back(content, textures.back(), yPosition);
+        posts.emplace_back(content, textures.back(), yPosition,us);
         inputText.setString("Write something here...");
         inputText.setFillColor(sf::Color(128, 128, 128));
     } else {
@@ -395,7 +397,7 @@ int main() {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
-            feed.handleEvent(event);
+            feed.handleEvent(event,"awais");
         }
 
         window.clear(sf::Color::White);
