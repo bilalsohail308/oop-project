@@ -2,6 +2,8 @@
 #include <SFML/Window.hpp>
 #include <vector>
 #include <string>
+#include <fstream>     // For file streams (std::ifstream, std::ofstream)
+#include <sstream>
 #include <iostream>
 
 #include "tinyfiledialog.cpp"
@@ -184,6 +186,8 @@ Post::Post(const std::string& content, const sf::Texture& texture, double yPosit
 class PostFeed {
 public:
     PostFeed(sf::RenderWindow* win);
+    void saveItemToFile(const std::string& content, const std::string& filepath, double yPosition, const std::string& username);
+    void loadItemsFromFile();
     
 
     void draw();
@@ -195,7 +199,7 @@ public:
 
 private:
     sf::RenderWindow* window;
-    std::string filePath = "posts.txt";
+    std::string filePath = "F:\\sem3\\OOP\\oop-project\\Gossip\\posts";
     sf::View feedView;
     sf::Font font;
     int noofposts{0};
