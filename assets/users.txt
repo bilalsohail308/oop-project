@@ -1,0 +1,21 @@
+ayesha,noor
+ayeshanoor,aa
+aa,a
+ayeshaa,hi,2027,CE
+Niha,ayesha,2027,CE
+Jungkook,hello,2027,SDP
+mary,abc,2028,CE
+Kuku,abc,2027,cs
+kiki,abc,2027,cs
+batman,abc,2027,cs
+AyeshaNoor,abc,2027,CE
+Aimun,abc,2027,cnd
+Aimun,abc,2027,cnd
+Bilal,abc,2027,EE
+Rizwan Zafar,abc,2025,CE
+salman,abc,2027,cs
+hamda,bilal,2026,sdp
+beelal,none,2027,ee,
+hi,hi,2027,CS
+gill,gill,28,CS
+emaane,emaan	,27,cs

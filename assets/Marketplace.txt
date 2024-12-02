@@ -1,0 +1,5 @@
+ITEM-1,ayeshaa,abdj,abc,jancbjlancn,23,C:\Users\AWAIS GILL\Pictures\Screenshots\IMG-20241030-WA0085.jpg
+ITEM-1,beelal,aw,afaf,1,C:\Users\AWAIS GILL\Pictures\Screenshots\IMG-20241030-WA0085.jpg
+ITEM-1,ayeshaa,samreen,siraiki,10000,C:\Users\AWAIS GILL\Pictures\Screenshots\Screenshot 2023-12-21 100015.png
+ITEM-1,hi,hshs,hshshs,9,C:\Users\AWAIS GILL\Pictures\Screenshots\IMG-20241030-WA0085.jpg
+ITEM-1,hi,hv,jj,9,C:\Users\AWAIS GILL\Pictures\Screenshots\IMG-20241030-WA0085.jpg
