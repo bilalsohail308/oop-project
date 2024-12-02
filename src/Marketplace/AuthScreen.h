@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include "MarketplaceScreen.h"
 
 class AuthScreen {
 public:

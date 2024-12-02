@@ -9,7 +9,7 @@
 void AuthScreen::showDialogBox(sf::RenderWindow& parentWindow, const std::string& message, const std::string& title) {
     sf::RenderWindow dialogBox(sf::VideoMode(300, 150), title, sf::Style::Titlebar | sf::Style::Close);
     sf::Font font;
-    if (!font.loadFromFile("C:/Users/LENOVO/OneDrive/Desktop/Cpp/project.cpp/Marketplace/Arial.ttf")) {
+    if (!font.loadFromFile("F:\\sem3\\OOP\\oop-project\\src\\Marketplace\\Arial.ttf")) {
         std::cerr << "Error: Could not load font!" << std::endl;
         return;
     }
@@ -49,7 +49,7 @@ void AuthScreen::showDialogBox(sf::RenderWindow& parentWindow, const std::string
 
 bool AuthScreen::loginScreen(sf::RenderWindow& window, const std::string& filePath, std::string& username, std::string& batch, std::string& major) {
     sf::Font font;
-    if (!font.loadFromFile("C:/Users/LENOVO/OneDrive/Desktop/Cpp/project.cpp/Marketplace/Arial.ttf")) {
+    if (!font.loadFromFile("F:\\sem3\\OOP\\oop-project\\src\\Marketplace\\Arial.ttf")) {
         std::cerr << "Error: Could not load font!" << std::endl;
         return false;
     }
@@ -236,7 +236,7 @@ bool AuthScreen::loginScreen(sf::RenderWindow& window, const std::string& filePa
 
 void AuthScreen::signupScreen(sf::RenderWindow& window, const std::string& filePath) {
     sf::Font font;
-    if (!font.loadFromFile("C:/Users/LENOVO/OneDrive/Desktop/Cpp/project.cpp/Marketplace/Arial.ttf")) {
+    if (!font.loadFromFile("F:\\sem3\\OOP\\oop-project\\src\\Marketplace\\Arial.ttf")) {
         std::cerr << "Error: Could not load font!" << std::endl;
         return;
     }
@@ -440,7 +440,7 @@ void AuthScreen::signupScreen(sf::RenderWindow& window, const std::string& fileP
 
 void AuthScreen::showProfileScreen(sf::RenderWindow& window, const std::string& username, const std::string& batch, const std::string& major) {
     sf::Font font;
-    if (!font.loadFromFile("C:/Users/LENOVO/OneDrive/Desktop/Cpp/project.cpp/Marketplace/Arial.ttf")) {
+    if (!font.loadFromFile("F:\\sem3\\OOP\\oop-project\\src\\Marketplace\\Arial.ttf")) {
         std::cerr << "Error loading font!" << std::endl;
         return;
     }
@@ -470,7 +470,7 @@ void AuthScreen::showProfileScreen(sf::RenderWindow& window, const std::string& 
     bool profilePicLoaded = false;
 
     // Load default picture
-    if (!profilePicTexture.loadFromFile("default.png")) {
+    if (!profilePicTexture.loadFromFile("F:\\sem3\\OOP\\oop-project\\src\\Marketplace\\R.jpeg")) {
         std::cerr << "Error: Unable to load default profile picture." << std::endl;
     } else {
         profilePicBox.setTexture(&profilePicTexture);
@@ -511,7 +511,7 @@ void AuthScreen::showProfileScreen(sf::RenderWindow& window, const std::string& 
                         std::cerr << "Error loading the selected image." << std::endl;
                     }
                 } else if (backButton.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-                    return; // Navigate back to the previous screen
+                    return ; // Navigate back to the previous screen
                 }
             }
         }

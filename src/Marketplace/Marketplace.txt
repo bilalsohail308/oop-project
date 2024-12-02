@@ -1,10 +1,5 @@
-ITEM-1,beelal,unique id check,1,123,C:\Users\LENOVO\OneDrive\Pictures\2023-10-08 (2).png;C:\Users\LENOVO\OneDrive\Pictures\final withou text.jpg;C:\Users\LENOVO\OneDrive\Pictures\2023-10-08 (1).png
-ITEM-1,beelal,unique id check,3,123,C:\Users\LENOVO\OneDrive\Pictures\baking smth.png
-ITEM-1,beelal,testing on txt file,1,123,C:\Users\LENOVO\OneDrive\Pictures\baking smth.png
-ITEM-2,beelal,testing 2,123,123,C:\Users\LENOVO\OneDrive\Pictures\baking smth.png
-ITEM-5,hamda,new id testing ,none,123,C:\Users\LENOVO\OneDrive\Pictures\final withou text.jpg
-ITEM-6,beelal,logottesting,1,123,C:\Users\LENOVO\OneDrive\Pictures\baking smth.png;C:\Users\LENOVO\OneDrive\Pictures\2023-10-08 (2).png
-ITEM-8,beelal,hello,testing,123,C:\Users\LENOVO\OneDrive\Pictures\baking smth.png
-ITEM-10,beelal,initial successeful,2nd test,123,C:\Users\LENOVO\OneDrive\Pictures\2023-10-08 (2).png
-ITEM-11,beelal,deleteig item,success?,123,C:\Users\LENOVO\OneDrive\Pictures\images.jpg
-ITEM-12,beelal,demo,1st,123,C:\Users\LENOVO\OneDrive\Pictures\baking smth.png;C:\Users\LENOVO\OneDrive\Pictures\final withou text.jpg;C:\Users\LENOVO\OneDrive\Pictures\2023-10-08 (2).png
+ITEM-1,ayeshaa,abdj,abc,jancbjlancn,23,C:\Users\AWAIS GILL\Pictures\Screenshots\IMG-20241030-WA0085.jpg
+ITEM-1,beelal,aw,afaf,1,C:\Users\AWAIS GILL\Pictures\Screenshots\IMG-20241030-WA0085.jpg
+ITEM-1,ayeshaa,samreen,siraiki,10000,C:\Users\AWAIS GILL\Pictures\Screenshots\Screenshot 2023-12-21 100015.png
+ITEM-1,hi,hshs,hshshs,9,C:\Users\AWAIS GILL\Pictures\Screenshots\IMG-20241030-WA0085.jpg
+ITEM-1,hi,hv,jj,9,C:\Users\AWAIS GILL\Pictures\Screenshots\IMG-20241030-WA0085.jpg

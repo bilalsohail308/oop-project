@@ -3,6 +3,8 @@
 #include "NavBar.h"
 #include "AuthScreen.h"
 #include "Screen.h"
+#include "EventScreen.h"
+#include "gossip.h"
 #include <iostream>
 #include <memory>
 
@@ -10,22 +12,23 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Marketplace App");
     sf::Font font;
 
-    if (!font.loadFromFile("C:/Users/LENOVO/OneDrive/Desktop/Cpp/project.cpp/Marketplace/Arial.ttf")) {
+    if (!font.loadFromFile("F:\\sem3\\OOP\\oop-project\\src\\Marketplace\\Arial.ttf")) {
         std::cerr << "Error: Could not load font!" << std::endl;
         return -1;
     }
 
     // Initialize user-related variables
     std::string username, batch, major;
-    const std::string userFilePath = "C:/Users/LENOVO/OneDrive/Desktop/Cpp/project.cpp/Marketplace/users.txt"; // File to store user data
+    const std::string userFilePath = "F:\\sem3\\OOP\\oop-project\\src\\Marketplace\\users.txt"; // File to store user data
 
     // Show authentication screen
     if (!AuthScreen::loginScreen(window, userFilePath, username, batch, major)) {
         return 0; // Exit if the user closes the login screen
     }
 
-    // Dynamically manage the marketplace screen
-    std::unique_ptr<MarketplaceScreen> marketplaceScreen = std::make_unique<MarketplaceScreen>(username);
+    // Dynamically manage the screens
+    std::unique_ptr<MarketplaceScreen> marketplaceScreen = std::make_unique<MarketplaceScreen>(username,"F:\\sem3\\OOP\\oop-project\\src\\Marketplace\\Marketplace.txt");
+    std::unique_ptr<MarketplaceScreen> eventScreen = std::make_unique<EventScreen>(username);
 
     NavBar navBar(font);
     Screen currentScreen = MARKETPLACE; // Default to Marketplace screen
@@ -52,8 +55,9 @@ int main() {
                     return 0; // Exit if user closes login screen
                 }
 
-                // Reinitialize the marketplace screen for the new user
-                marketplaceScreen = std::make_unique<MarketplaceScreen>(username);
+                // Reinitialize screens for the new user
+                marketplaceScreen = std::make_unique<MarketplaceScreen>(username,"F:\\sem3\\OOP\\oop-project\\src\\Marketplace\\Marketplace.txt");
+                eventScreen = std::make_unique<EventScreen>(username);
                 navBar = NavBar(font); // Reinitialize NavBar to avoid stale state
                 currentScreen = MARKETPLACE; // Reset to default screen
                 isLoggedOut = false; // Reset logout flag
@@ -64,17 +68,40 @@ int main() {
                 case MARKETPLACE:
                     marketplaceScreen->handleEvents(window, event);
                     break;
-                case GOSSIP:
+
+                case GOSSIP: {
                     // Handle Gossip screen events
-                    break;
+                    sf::RenderWindow gossipWindow(sf::VideoMode(800, 600), "Post Feed");
+                    PostFeed gossipFeed(&gossipWindow); // Initialize the PostFeed object for the Gossip window
+
+                    while (gossipWindow.isOpen()) {
+                        sf::Event gossipEvent;
+                        while (gossipWindow.pollEvent(gossipEvent)) {
+                            if (gossipEvent.type == sf::Event::Closed) {
+                                gossipWindow.close(); // Close the Gossip window
+                            }
+                            gossipFeed.handleEvent(gossipEvent, username); // Pass the username dynamically
+                        }
+
+                        gossipWindow.clear(sf::Color::White);
+                        gossipFeed.draw(); // Render the posts in the Gossip feed
+                        gossipWindow.display();
+                    }
+
+                    // After Gossip window is closed, switch back to the default screen
+                    currentScreen = MARKETPLACE;
+                }
+                break;
+
                 case EVENTS:
-                    // Handle Events screen events
+                    if (eventScreen) {
+                        eventScreen->handleEvents(window, event);
+                    }
                     break;
-                case TICKETING:
-                    // Handle Ticketing screen events
-                    break;
+
                 case PROFILE:
                     AuthScreen::showProfileScreen(window, username, batch, major);
+                    currentScreen = MARKETPLACE;
                     break;
             }
         }
@@ -85,18 +112,16 @@ int main() {
             case MARKETPLACE:
                 marketplaceScreen->render(window);
                 break;
-            case GOSSIP:
-                // Render Gossip screen
-                break;
+
             case EVENTS:
-                // Render Events screen
+                if (eventScreen) {
+                    eventScreen->render(window);
+                }
                 break;
-            case TICKETING:
-                // Render Ticketing screen
-                break;
+
             case PROFILE:
                 AuthScreen::showProfileScreen(window, username, batch, major);
-                currentScreen = MARKETPLACE; // Return to Marketplace after viewing the profile
+                marketplaceScreen->render(window);
                 break;
         }
 

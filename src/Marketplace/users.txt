@@ -16,3 +16,6 @@ Rizwan Zafar,abc,2025,CE
 salman,abc,2027,cs
 hamda,bilal,2026,sdp
 beelal,none,2027,ee,
+hi,hi,2027,CS
+gill,gill,28,CS
+emaane,emaan	,27,cs
