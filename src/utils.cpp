@@ -4,7 +4,7 @@
 
 // Function to generate a unique ID
 std::string generateUniqueId() {
-    const std::string idFilePath = "../assets/unique_id_counter.txt";
+    const std::string idFilePath = "F:\\sem3\\OOP\\oop-project\\assets\\unique_id_counter.txt";
     static int counter = 0;
 
     std::ifstream inFile(idFilePath);
