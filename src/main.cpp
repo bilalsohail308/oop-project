@@ -99,7 +99,7 @@ int main() {
 
                 case EVENTS:
                     if (eventScreen) {
-                        marketplaceScreen->handleEvents(window, event);
+                        eventScreen->handleEvents(window, event);
                     }
                     break;
 
