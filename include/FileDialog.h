@@ -1,4 +1,4 @@
-#ifndef FILE_DIALOG_H
+#ifndef FILE_DIALOG_H  //used AI as this part uses windows library for image uploading
 #define FILE_DIALOG_H
 
 #include <string>
