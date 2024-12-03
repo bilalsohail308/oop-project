@@ -9,7 +9,7 @@
 #include <memory>
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Marketplace App");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "HU Bazaar");
     sf::Font font;
 
     if (!font.loadFromFile("F:\\sem3\\OOP\\oop-project\\assets\\Arial.ttf")) {
