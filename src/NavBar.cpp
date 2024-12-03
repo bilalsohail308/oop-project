@@ -7,7 +7,7 @@ NavBar::NavBar(const sf::Font& font) : font(font), activeButton(-1) {
     background.setFillColor(sf::Color(50, 50, 50));
 
     // Define button labels
-    std::vector<std::string> labels = {"Gossip", "Marketplace", "Events", "Ticketing"};
+    std::vector<std::string> labels = {"Gossip", "Marketplace", "Events"};
 
     float buttonWidth = 120.0f;
     float buttonHeight = 30.0f;

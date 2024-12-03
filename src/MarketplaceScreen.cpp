@@ -16,7 +16,7 @@ const float MarketplaceScreen::SCROLL_SPEED = 20.0f;
 MarketplaceScreen::MarketplaceScreen(const std::string& username, std::string filePath)
     : username(username), scrollOffset(0), boxWidth(Item::BOX_WIDTH), boxHeight(Item::BOX_HEIGHT), nextX(0), nextY(100) {
         
-    if (!font.loadFromFile("F:\\sem3\\OOP\\oop-project\\assets\\Arial.ttf")) {
+    if (!font.loadFromFile("../assets/Arial.ttf")) {
         std::cerr << "Error: Could not load font!\n";
     }
 
@@ -92,7 +92,7 @@ void MarketplaceScreen::handleEvents(sf::RenderWindow& window, sf::Event& event)
         Item newItem(uniqueId, name, description, price, imagePaths, username);
         items.emplace_back(newItem);
 
-        saveItemToFile(newItem,"F:\\sem3\\OOP\\oop-project\\assets\\Marketplace.txt"); // Save to file
+        saveItemToFile(newItem,"../assets/Marketplace.txt"); // Save to file
      updateLayout(window, items, boxWidth, boxHeight, nextX, nextY, PADDING, uploadButton, uploadText);
 }
         }
@@ -112,7 +112,7 @@ void MarketplaceScreen::deleteItem(const std::string& uniqueId) {
         items.erase(it); // Remove the item from memory
 
         // Rewrite the file
-        std::ofstream outFile("F:\\sem3\\OOP\\oop-project\\assets\\Marketplace.txt");
+        std::ofstream outFile("../assets/Marketplace.txt");
         if (!outFile.is_open()) {
             std::cerr << "Error: Could not open file for writing.\n";
             return;
@@ -219,7 +219,7 @@ void MarketplaceScreen::openItemPreview(const Item& item) {
     sf::RenderWindow previewWindow(sf::VideoMode(800, 600), "Item Preview");
     sf::Font font;
 
-    if (!font.loadFromFile("F:\\sem3\\OOP\\oop-project\\assets\\Arial.ttf")) {
+    if (!font.loadFromFile("../assets/Arial.ttf")) {
         std::cerr << "Error: Could not load font!" << std::endl;
         return;
     }

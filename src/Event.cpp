@@ -5,7 +5,7 @@
 
 // Constructor
 EventScreen::EventScreen(const std::string& username)
-    : MarketplaceScreen(username,"F:\\sem3\\OOP\\oop-project\\assets\\event.txt") {
+    : MarketplaceScreen(username,"../assets/event.txt") {
     title.setString("Events"); // Adjust the title for the event screen
     uploadText.setString("Add Event");
     std::cout << "EventScreen initialized for user: " << username << "\n";
@@ -59,7 +59,7 @@ void EventScreen::handleEvents(sf::RenderWindow& window, sf::Event& event) {
         Item newItem(uniqueId, name, description, price, imagePaths, username);
         items.emplace_back(newItem);
 
-        saveItemToFile(newItem,"F:\\sem3\\OOP\\oop-project\\assets\\event.txt"); // Save to file
+        saveItemToFile(newItem,"../assets/event.txt"); // Save to file
      updateLayout(window, items, boxWidth, boxHeight, nextX, nextY, PADDING, uploadButton, uploadText);
 }
         }
