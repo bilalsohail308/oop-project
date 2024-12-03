@@ -9,7 +9,7 @@ bool openFormWindow(std::string& name, std::string& description, int& price, std
     sf::Font font;
 
     // Load the font
-    if (!font.loadFromFile("F:\\sem3\\OOP\\oop-project\\assets\\Arial.ttf")) {
+    if (!font.loadFromFile("../assets/Arial.ttf")) {
         std::cerr << "Error: Could not load font from path!" << std::endl;
         return false;
     }
@@ -190,7 +190,7 @@ bool openEFormWindow(std::string& name, std::string& description, int& price, st
     sf::Font font;
 
     // Load the font
-    if (!font.loadFromFile("F:\\sem3\\OOP\\oop-project\\assets\\Arial.ttf")) {
+    if (!font.loadFromFile("../assets/Arial.ttf")) {
         std::cerr << "Error: Could not load font from path!" << std::endl;
         return false;
     }
@@ -365,4 +365,164 @@ bool openEFormWindow(std::string& name, std::string& description, int& price, st
     }
 
     return false;
+}
+bool openTicketingForm(std::string& name, std::string& contactNumber, std::string& paymentID) {
+    sf::RenderWindow formWindow(sf::VideoMode(400, 350), "Ticketing Form");
+    sf::Font font;
+
+    // Load the font
+    if (!font.loadFromFile("assets\\Arial.ttf")) {
+        std::cerr << "Error: Could not load font from path!" << std::endl;
+        return false;
+    }
+
+    // Title
+    sf::Text title("Ticketing", font, 20);
+    title.setPosition(120, 10);
+    title.setFillColor(sf::Color::Black);
+
+    // Labels
+    sf::Text nameLabel("Name:", font, 15);
+    nameLabel.setPosition(20, 60);
+    nameLabel.setFillColor(sf::Color::Black);
+
+    sf::Text contactLabel("Contact Number:", font, 15);
+    contactLabel.setPosition(20, 110);
+    contactLabel.setFillColor(sf::Color::Black);
+
+    sf::Text paymentIDLabel("Ticket Payment ID:", font, 15);
+    paymentIDLabel.setPosition(20, 160);
+    paymentIDLabel.setFillColor(sf::Color::Black);
+
+    // Input field backgrounds
+    sf::RectangleShape nameField(sf::Vector2f(250, 25));
+    nameField.setPosition(120, 60);
+    nameField.setFillColor(sf::Color(230, 230, 230)); // Light gray
+
+    sf::RectangleShape contactField(sf::Vector2f(250, 25));
+    contactField.setPosition(120, 110);
+    contactField.setFillColor(sf::Color(230, 230, 230));
+
+    sf::RectangleShape paymentField(sf::Vector2f(250, 25));
+    paymentField.setPosition(120, 160);
+    paymentField.setFillColor(sf::Color(230, 230, 230));
+
+    // Submit button
+    sf::RectangleShape submitButton(sf::Vector2f(100, 30));
+    submitButton.setFillColor(sf::Color::Green);
+    submitButton.setPosition(150, 230);
+
+    sf::Text submitText("Submit", font, 15);
+    submitText.setPosition(170, 235);
+    submitText.setFillColor(sf::Color::White);
+
+    // Error message
+    sf::Text errorMessage("", font, 15);
+    errorMessage.setPosition(20, 270);
+    errorMessage.setFillColor(sf::Color::Red);
+
+    // Input field texts
+    sf::String inputName, inputContact, inputPaymentID;
+    sf::Text nameText("", font, 15);
+    nameText.setPosition(125, 63);
+    nameText.setFillColor(sf::Color::Black);
+
+    sf::Text contactText("", font, 15);
+    contactText.setPosition(125, 113);
+    contactText.setFillColor(sf::Color::Black);
+
+    sf::Text paymentText("", font, 15);
+    paymentText.setPosition(125, 163);
+    paymentText.setFillColor(sf::Color::Black);
+
+    // Active field tracking
+    enum ActiveField { NAME, CONTACT, PAYMENT_ID, NONE };
+    ActiveField activeField = NAME;
+
+    auto setActiveField = [&](ActiveField field) {
+        activeField = field;
+
+        nameField.setFillColor(sf::Color(230, 230, 230));
+        contactField.setFillColor(sf::Color(230, 230, 230));
+        paymentField.setFillColor(sf::Color(230, 230, 230));
+
+        if (activeField == NAME) nameField.setFillColor(sf::Color::White);
+        else if (activeField == CONTACT) contactField.setFillColor(sf::Color::White);
+        else if (activeField == PAYMENT_ID) paymentField.setFillColor(sf::Color::White);
+    };
+
+    setActiveField(NAME);
+
+    while (formWindow.isOpen()) {
+        sf::Event event;
+        while (formWindow.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                formWindow.close();
+                return false;
+            }
+
+            if (event.type == sf::Event::TextEntered) {
+                if (event.text.unicode == '\b') {
+                    if (activeField == NAME && !inputName.isEmpty()) inputName.erase(inputName.getSize() - 1, 1);
+                    else if (activeField == CONTACT && !inputContact.isEmpty()) inputContact.erase(inputContact.getSize() - 1, 1);
+                    else if (activeField == PAYMENT_ID && !inputPaymentID.isEmpty()) inputPaymentID.erase(inputPaymentID.getSize() - 1, 1);
+                } else if (event.text.unicode < 128 && event.text.unicode >= 32) {
+                    if (activeField == NAME) inputName += static_cast<char>(event.text.unicode);
+                    else if (activeField == CONTACT) inputContact += static_cast<char>(event.text.unicode);
+                    else if (activeField == PAYMENT_ID) inputPaymentID += static_cast<char>(event.text.unicode);
+                }
+            }
+
+            if (event.type == sf::Event::MouseButtonPressed) {
+                sf::Vector2i mousePos = sf::Mouse::getPosition(formWindow);
+
+                if (nameField.getGlobalBounds().contains(mousePos.x, mousePos.y)) setActiveField(NAME);
+                else if (contactField.getGlobalBounds().contains(mousePos.x, mousePos.y)) setActiveField(CONTACT);
+                else if (paymentField.getGlobalBounds().contains(mousePos.x, mousePos.y)) setActiveField(PAYMENT_ID);
+                else if (submitButton.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
+                    if (!inputName.isEmpty() && !inputContact.isEmpty() && !inputPaymentID.isEmpty()) {
+                        name = inputName.toAnsiString();
+                        contactNumber = inputContact.toAnsiString();
+                        paymentID = inputPaymentID.toAnsiString();
+                        formWindow.close();
+                        return true;
+                    } else {
+                        // Display error message
+                        errorMessage.setString("Please fill all fields!");
+                    }
+                }
+            }
+        }
+
+    
+        nameText.setString(inputName);
+        contactText.setString(inputContact);
+        paymentText.setString(inputPaymentID);
+
+    
+        formWindow.clear(sf::Color::White);
+
+        formWindow.draw(title);
+        formWindow.draw(nameLabel);
+        formWindow.draw(contactLabel);
+        formWindow.draw(paymentIDLabel);
+
+        formWindow.draw(nameField);
+        formWindow.draw(contactField);
+        formWindow.draw(paymentField);
+
+        formWindow.draw(nameText);
+        formWindow.draw(contactText);
+        formWindow.draw(paymentText);
+
+        formWindow.draw(submitButton);
+        formWindow.draw(submitText);
+
+        // Draw the error message
+        formWindow.draw(errorMessage);
+
+        formWindow.display();
+    }
+
+   return false;
 }
