@@ -13,7 +13,7 @@ using namespace std;
 
 
     Comment::Comment(const std::string& text, float yPosition) {
-        font.loadFromFile("../assets/Arial.ttf");
+        font.loadFromFile("F:\\sem3\\OOP\\oop-project\\assets\\Arial.ttf");
 
         content.setFont(font);
         content.setString(text);
@@ -32,7 +32,7 @@ using namespace std;
 
 
     CommentBox::CommentBox() {
-        font.loadFromFile("../assets/Arial.ttf");
+        font.loadFromFile("F:\\sem3\\OOP\\oop-project\\assets\\Arial.ttf");
 
         
         background.setSize({400, 600});
@@ -123,7 +123,7 @@ Post::Post(const std::string& content, const sf::Texture& texture, double yPosit
     postBox.setPosition(25, yPosition);
 
     
-    fonta.loadFromFile("../assets/Arial.ttf");
+    fonta.loadFromFile("F:\\sem3\\OOP\\oop-project\\assets\\Arial.ttf");
     text.setFont(fonta);
     text.setString(a+" : "+content);
     text.setCharacterSize(18);
@@ -167,8 +167,8 @@ Post::Post(const std::string& content, const sf::Texture& texture, double yPosit
 
 PostFeed::PostFeed(sf::RenderWindow* win)
     : window(win), scrollOffset(0), imageLoaded(false), lastWindowSize(win->getSize()) {
-    font.loadFromFile("../assets/Arial.ttf");
-    filePath="../assets/posts.txt";
+    font.loadFromFile("F:\\sem3\\OOP\\oop-project\\assets\\Arial.ttf");
+    filePath="F:\\sem3\\OOP\\oop-project\\assets\\posts.txt";
     initializeUI();
     loadItemsFromFile();
 }

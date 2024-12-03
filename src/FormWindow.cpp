@@ -9,7 +9,7 @@ bool openFormWindow(std::string& name, std::string& description, int& price, std
     sf::Font font;
 
     // Load the font
-    if (!font.loadFromFile("../assets/Arial.ttf")) {
+    if (!font.loadFromFile("F:\\sem3\\OOP\\oop-project\\assets\\Arial.ttf")) {
         std::cerr << "Error: Could not load font from path!" << std::endl;
         return false;
     }
@@ -190,7 +190,7 @@ bool openEFormWindow(std::string& name, std::string& description, int& price, st
     sf::Font font;
 
     // Load the font
-    if (!font.loadFromFile("../assets/Arial.ttf")) {
+    if (!font.loadFromFile("F:\\sem3\\OOP\\oop-project\\assets\\Arial.ttf")) {
         std::cerr << "Error: Could not load font from path!" << std::endl;
         return false;
     }

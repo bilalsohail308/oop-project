@@ -12,14 +12,14 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "HU Bazaar");
     sf::Font font;
 
-    if (!font.loadFromFile("../assets/Arial.ttf")) {
+    if (!font.loadFromFile("F:\\sem3\\OOP\\oop-project\\assets\\Arial.ttf")) {
         std::cerr << "Error: Could not load font!" << std::endl;
         return -1;
     }
 
     // Initialize user-related variables
     std::string username, batch, major;
-    const std::string userFilePath = "../assets/users.txt"; // File to store user data
+    const std::string userFilePath = "F:\\sem3\\OOP\\oop-project\\assets\\users.txt"; // File to store user data
 
     // Show authentication screen
     if (!AuthScreen::loginScreen(window, userFilePath, username, batch, major)) {
@@ -27,7 +27,7 @@ int main() {
     }
 
     
-    std::unique_ptr<MarketplaceScreen> marketplaceScreen = std::make_unique<MarketplaceScreen>(username,"../assets/Marketplace.txt");
+    std::unique_ptr<MarketplaceScreen> marketplaceScreen = std::make_unique<MarketplaceScreen>(username,"F:\\sem3\\OOP\\oop-project\\assets\\Marketplace.txt");
     
 
     NavBar navBar(font);
@@ -60,7 +60,7 @@ int main() {
                 }
 
                 // Reinitialize screens for the new user
-                marketplaceScreen = std::make_unique<MarketplaceScreen>(username,"../assets/Marketplace.txt");
+                marketplaceScreen = std::make_unique<MarketplaceScreen>(username,"F:\\sem3\\OOP\\oop-project\\assets\\Marketplace.txt");
                 eventScreen = std::make_unique<EventScreen>(username);
                 navBar = NavBar(font); // Reinitialize NavBar to avoid stale state
                 currentScreen = MARKETPLACE; // Reset to default screen
